@@ -1,24 +1,22 @@
 import express from "express";
+import serverless from "serverless-http";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "../../config/db.js";
-import connectCloudinary from "../../config/cloudinary.js"
+import connectCloudinary from "../../config/cloudinary.js";
 import adminRouter from "../../routes/adminRoute.js";
 import doctorRouter from "../../routes/doctorRoute.js";
 import userRouter from "../../routes/userRoute.js";
+import otpRouter from "../../routes/otpRoute.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import otpRouter from "../../routes/otpRoute.js";
-import serverless from "serverless-http";
 
-// ESM setup
 const __filename = fileURLToPath(import.meta.url);
-const _dirname = path.dirname(_filename);
+const __dirname = path.dirname(__filename);
 
+// Env Setup
 dotenv.config();
-await connectDB();
-connectCloudinary();
 
 const app = express();
 
@@ -37,11 +35,21 @@ app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
 app.use("/api/otp", otpRouter);
-app.use("/reports", express.static(path.join(__dirname, "../reports")));
 
+// Static files
+app.use("/reports", express.static(path.join(__dirname, "../../reports")));
+
+// Default route
 app.get("/api", (req, res) => {
-  res.send("Netlify Express API is working!");
+  res.send("✅ API is working on Netlify!");
 });
 
-// Export as lambda handler
+// Initialize DB + Cloudinary
+const initializeApp = async () => {
+  await connectDB();
+  connectCloudinary();
+};
+
+initializeApp();
+
 export const handler = serverless(app);
