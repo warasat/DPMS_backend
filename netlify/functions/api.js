@@ -12,8 +12,8 @@ import otpRouter from "../../routes/otpRoute.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filen = fileURLToPath(import.meta.url);
+const __dir = path.dirname(__filen);
 
 // Env Setup
 dotenv.config();
@@ -37,7 +37,7 @@ app.use("/api/user", userRouter);
 app.use("/api/otp", otpRouter);
 
 // Static files
-app.use("/reports", express.static(path.join(__dirname, "../../reports")));
+app.use("/reports", express.static(path.join(__dir, "../../reports")));
 
 // Default route
 app.get("/api", (req, res) => {
