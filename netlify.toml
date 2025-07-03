@@ -1,12 +1,9 @@
 [build]
+  functions = "functions"
   command = "npm install"
-  functions = "netlify/functions"
-  publish = "."
-
-[build.environment]
-  NODE_VERSION = "18"
 
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
-  status = 200
+  status = 200
+.
